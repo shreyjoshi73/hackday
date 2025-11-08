@@ -1,6 +1,6 @@
-# 🎓 UniAssist – AI Student Helper Chrome Extension
+# 🎓 College Assistant – AI Student Helper Chrome Extension
 
-UniAssist is a Chrome extension designed to help students navigate common challenges in admissions, hostel allotment, and fee payments. It integrates Google Gemini AI, Firebase, DigiLocker, and supports language translation, providing a seamless, interactive experience for students.
+College Assistant is a Chrome extension designed to help students navigate common challenges in admissions, hostel allotment, and fee payments. It integrates Google Gemini AI, Firebase, DigiLocker, and supports language translation, providing a seamless, interactive experience for students.
 
 ---
 
