@@ -1,23 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" />
+  <title>UniAssist 🎓</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="popup-container">
-    <h2>JAC Delhi & DTU Assistant</h2>
+  <div id="chat-container">
+    <h2>🎓 UniAssist Chat</h2>
+    <div id="chat-box"></div>
+    <div id="input-area">
+      <textarea id="userInput" placeholder="Ask about admission, hostel, or fees..."></textarea>
+      <button id="sendBtn">Send</button>
+    </div>
 
-    <button id="autofill">Autofill Admission Form</button>
-    <button id="checkStatus">Check Admission Status</button>
-    <button id="showRooms">Show Hostel Rooms</button>
-
-    <div id="status"></div>
-    <div id="rooms"></div>
-
-    <label class="toggle">
-      Dark Mode <input type="checkbox" id="darkMode" />
-    </label>
+    <!-- Shortcut buttons -->
+    <div id="shortcut-buttons">
+      <button id="trackAdmission">Track Admission Progress</button>
+      <button id="showHostel">Show Hostel Availability</button>
+      <button id="viewFees">View Fee Dashboard</button>
+      <button id="uploadDocs">Upload Documents (DigiLocker)</button>
+      <button id="translateLang">Translate Chat</button>
+    </div>
   </div>
+
   <script type="module" src="popup.js"></script>
 </body>
 </html>
