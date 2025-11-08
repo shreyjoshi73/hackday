@@ -1,0 +1,47 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 10px;
+  background: #fff;
+  color: #333;
+}
+
+button {
+  display: block;
+  margin: 5px 0;
+  padding: 8px;
+  width: 100%;
+  border: none;
+  background: #4b7bec;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover { background: #3867d6; }
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.room-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px;
+  background: #f9f9f9;
+}
+
+.dark {
+  background: #1e1e1e;
+  color: #f0f0f0;
+}
+
+.dark button {
+  background: #575fcf;
+}
+
+.dark .room-card {
+  background: #2c2c2c;
+  border-color: #444;
+}
