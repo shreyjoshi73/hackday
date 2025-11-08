@@ -1,6 +1,6 @@
-// Wrapper around IndexedDB for larger form data and room info.
-const DB_NAME = "AdmissionHelperDB";
-const STORE_NAME = "formData";
+// IndexedDB helper for saving large form or hostel data
+const DB_NAME = "JacDtuHelperDB";
+const STORE_NAME = "data";
 
 export function openDB() {
   return new Promise((resolve, reject) => {
@@ -27,4 +27,3 @@ export async function getData(id) {
   const result = await tx.objectStore(STORE_NAME).get(id);
   return result;
 }
-
