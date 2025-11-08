@@ -1,31 +1,43 @@
 {
   "manifest_version": 3,
-  "name": "Smart Admission & Hostel Assistant",
-  "version": "2.0",
-  "description": "Automate admission forms, track applications, visualize hostel availability, and improve UX.",
+  "name": "Uni-Assist: Student Helper",
+  "version": "1.0",
+  "description": "Automates student portal tasks like form filling, tracks application status, and provides AI-driven information.",
+  
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icons/icon-48.png",
+    "default_title": "Uni-Assist"
+  },
+  
   "permissions": [
-    "storage",
-    "notifications",
-    "activeTab",
+    "storage",          
+    "activeTab",        
+    "notifications",    
     "alarms",
-    "scripting"
+    "scripting"         
   ],
+  
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  
   "background": {
     "service_worker": "background.js"
   },
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": "icon.png"
-  },
+  
   "content_scripts": [
     {
-      "matches": ["*://universityportal.edu/*"],
-      "js": ["content.js"]
+      "matches": ["*://*.university-portal.edu/*", "*://portal.uni-app.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
     }
-  ],
-  "options_page": "options.html",
-  "icons": {
-    "128": "icon.png"
-  }
+  ]
 }
 
