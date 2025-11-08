@@ -1,69 +1,52 @@
-import { getData } from "./db.js";
+import { getGeminiResponse } from './gemini.js';
 
-// --- Autofill JAC Delhi ---
-document.getElementById("autofill").addEventListener("click", async () => {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    func: () => {
-      chrome.storage.sync.get(["userData"], ({ userData }) => {
-        if (!userData) return;
-        document.querySelectorAll("input, select, textarea").forEach(el => {
-          if (userData[el.name]) el.value = userData[el.name];
-        });
-      });
-    }
+const chatBox = document.getElementById("chat-box");
+const userInput = document.getElementById("userInput");
+const sendBtn = document.getElementById("sendBtn");
+
+let chatHistory = JSON.parse(localStorage.getItem("uniassist_chat")) || [];
+
+function renderChat() {
+  chatBox.innerHTML = "";
+  chatHistory.forEach(msg => {
+    const div = document.createElement("div");
+    div.classList.add("message", msg.sender);
+    div.textContent = msg.text;
+    chatBox.appendChild(div);
   });
-});
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
 
-// --- Admission Status ---
-document.getElementById("checkStatus").addEventListener("click", async () => {
-  const div = document.getElementById("status");
-  div.innerText = "Checking JAC Delhi status...";
-  try {
-    const res = await fetch("https://jacdelhi.admissions.nic.in/Applicant/Registration/CheckStatus", {
-      credentials: "include"
-    });
-    const text = await res.text();
-    if (text.includes("Seat Allotted")) div.innerText = "🎓 Seat Allotted!";
-    else if (text.includes("Document Verification")) div.innerText = "📄 Document Verification in progress.";
-    else div.innerText = "No update yet.";
-  } catch {
-    div.innerText = "Failed to fetch status.";
+async function sendMessage() {
+  const text = userInput.value.trim();
+  if (!text) return;
+
+  // Add user message
+  chatHistory.push({ sender: "user", text });
+  renderChat();
+  userInput.value = "";
+
+  // Add AI "thinking" placeholder
+  const thinkingMsg = { sender: "ai", text: "Thinking... 🤔" };
+  chatHistory.push(thinkingMsg);
+  renderChat();
+
+  // Get Gemini response
+  const reply = await getGeminiResponse(text);
+
+  // Replace placeholder with actual response
+  chatHistory[chatHistory.length - 1].text = reply;
+  renderChat();
+
+  localStorage.setItem("uniassist_chat", JSON.stringify(chatHistory));
+}
+
+sendBtn.addEventListener("click", sendMessage);
+userInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
   }
 });
 
-// --- Hostel Availability ---
-document.getElementById("showRooms").addEventListener("click", async () => {
-  const roomsDiv = document.getElementById("rooms");
-  roomsDiv.innerHTML = "Loading room data...";
-  const data = await getData("hostelRooms");
-  if (!data) {
-    roomsDiv.innerHTML = "Visit hostels.dtu.ac.in first to scrape room info.";
-    return;
-  }
-  const available = data.rooms.filter(r => r.vacant > 0);
-  roomsDiv.innerHTML = `
-    <h3>🏠 Available Rooms (${available.length})</h3>
-    <div class="room-grid">
-      ${available.map(r => `
-        <div class="room-card">
-          <h4>${r.name}</h4>
-          <p>Type: ${r.type}</p>
-          <p>Vacant: ${r.vacant}</p>
-        </div>`).join("")}
-    </div>`;
-});
-
-// --- Dark Mode ---
-const darkToggle = document.getElementById("darkMode");
-darkToggle.addEventListener("change", e => {
-  document.body.classList.toggle("dark", e.target.checked);
-  chrome.storage.sync.set({ darkMode: e.target.checked });
-});
-chrome.storage.sync.get(["darkMode"], ({ darkMode }) => {
-  if (darkMode) {
-    darkToggle.checked = true;
-    document.body.classList.add("dark");
-  }
-});
+renderChat();
